@@ -2,17 +2,26 @@
 #include <raylib.h>
 #include <raymath.h>
 #include "grid.hpp"
+#include "game.hpp"
+#include <deque>
 
+// Cell
 Cell cell;
+
+// Direction
 Direction direction;
 
-Food::Food()
+// Not sure if this is right
+// Game game;
+
+// Food logic
+Food::Food(std::deque<Vector2> snakebody)
 {
 
     Image image = LoadImage("assets/food.png");
     texture = LoadTextureFromImage(image);
     UnloadImage(image);
-    position = generateRandomPosition();
+    position = generateRandomPosition(snakebody);
 }
 
 Food::~Food()
@@ -27,13 +36,44 @@ void Food::draw()
     // DrawRectangle(position.x * cell.size, position.y * cell.size, cell.size, cell.size, RED);
 }
 
-Vector2 Food::generateRandomPosition()
+// Check if food next to snake
+// I dont really get this
+bool Food::elementInDeque(Vector2 snakefood, std::deque<Vector2> snakebody)
 {
-    float x = GetRandomValue(0, cell.count - 1);
-    float y = GetRandomValue(0, cell.count - 1);
+    for (unsigned int i = 0; i < snakebody.size(); i++)
+    {
+        if (Vector2Equals(snakefood, snakebody[i]))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+Vector2 Food::generateRandomCell()
+{
+    // cell.count - 2 to prevent food from spawning on the edge
+    float x = GetRandomValue(0, cell.count - 2);
+    float y = GetRandomValue(0, cell.count - 2);
     return Vector2{x, y};
 }
 
+Vector2 Food::generateRandomPosition(std::deque<Vector2> body)
+{
+
+    Vector2 position = generateRandomCell();
+
+    while (elementInDeque(position, body))
+    {
+        // -2 same reason as above, but i dont know why it doesnt work yet
+        float x = GetRandomValue(0, cell.count - 2);
+        float y = GetRandomValue(0, cell.count - 2);
+        position = Vector2{x, y};
+    }
+    return position;
+}
+
+// Snake logic
 Snake::Snake()
 {
     body = {Vector2{10, 10}, Vector2{11, 10}, Vector2{12, 10}};
@@ -53,10 +93,28 @@ void Snake::draw()
     }
 }
 
-void Snake::move()
+void Snake::reset()
 {
-    body.pop_back();
+    body = {Vector2{10, 10}, Vector2{11, 10}, Vector2{12, 10}};
+}
+
+void Snake::update()
+{
     body.push_front(Vector2Add(body[0], snake_direction));
+    // Honestly I dont get this,
+    // like you add a segment first regardless,
+    // then you check if addSegment is true (then ignore),
+    // else remove it again? A bit redundant?
+    if (addSegment == true)
+    {
+        // body.push_front(Vector2Add(body[0], snake_direction));
+        addSegment = false;
+    }
+    else
+    {
+        body.pop_back();
+        // body.push_front(Vector2Add(body[0], snake_direction));
+    }
 }
 
 bool Snake::eventTrigger(double interval)

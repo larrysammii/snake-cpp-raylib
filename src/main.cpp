@@ -1,6 +1,7 @@
 #include <raylib-cpp.hpp>
 // #include <raylib.h>
 #include "grid.hpp"
+#include "game.hpp"
 
 using namespace std;
 
@@ -15,10 +16,8 @@ int main()
     // raylib::Color textColor(LIGHTGRAY);
     // InitWindow(screenWidth, screenHeight, "Snake");
     raylib::Window w(screenWidth, screenHeight, "Snake");
-    Food food = Food();
-    Snake snake = Snake();
-    Direction direction;
-    double *lastUpdateTime = &snake.lastUpdateTime;
+    Game game;
+
     SetTargetFPS(60);
 
     // Main game loop
@@ -27,18 +26,16 @@ int main()
 
         // Draw
         BeginDrawing();
+        game.draw();
 
-        if (snake.eventTrigger(0.2))
-        {
-            snake.move();
-        }
-
-        snake.navigate();
+        game.update();
 
         ClearBackground(RAYWHITE);
 
-        food.draw();
-        snake.draw();
+        // if (game.running == false)
+        // {
+        //     game.makeItRun();
+        // }
 
         // textColor.DrawText("Congrats! You created your first window!", 190, 200, 20);
         EndDrawing();
