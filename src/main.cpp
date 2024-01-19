@@ -34,7 +34,7 @@ int main()
 
         game.update();
 
-        ClearBackground(RAYWHITE);
+        ClearBackground(DARKGRAY);
         DrawRectangleLinesEx(Rectangle{(float)offset - 5, (float)offset - 5, (float)cell.size * cell.count + 10, (float)cell.size * cell.count + 10}, 5, DARKGREEN);
 
         // if (game.running == false)
