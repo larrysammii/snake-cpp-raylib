@@ -11,6 +11,7 @@ public:
     Cell cell;
     Food food = Food(snake.body);
     bool running = true;
+    int score = 0;
 
     Game();
 

@@ -9,9 +9,11 @@ int main()
 {
 
     // Initialization
+    // Should've separated a lot of these in different header files but whatever.
     Cell cell;
-    int screenWidth = cell.size * cell.count;
-    int screenHeight = cell.size * cell.count;
+    int offset = 75;
+    int screenWidth = cell.size * cell.count + offset * 2;
+    int screenHeight = cell.size * cell.count + offset * 2;
 
     // raylib::Color textColor(LIGHTGRAY);
     // InitWindow(screenWidth, screenHeight, "Snake");
@@ -26,11 +28,14 @@ int main()
 
         // Draw
         BeginDrawing();
+        DrawText("snake", offset - 5, 20, 40, DARKGREEN);
+        DrawText(("score: " + to_string(game.score)).c_str(), offset - 5, offset + cell.size * cell.count + 10, 40, DARKGREEN);
         game.draw();
 
         game.update();
 
         ClearBackground(RAYWHITE);
+        DrawRectangleLinesEx(Rectangle{(float)offset - 5, (float)offset - 5, (float)cell.size * cell.count + 10, (float)cell.size * cell.count + 10}, 5, DARKGREEN);
 
         // if (game.running == false)
         // {

@@ -31,7 +31,9 @@ Food::~Food()
 
 void Food::draw()
 {
-    DrawTexture(texture, position.x * cell.size, position.y * cell.size, WHITE);
+    float offset = 75;
+
+    DrawTexture(texture, offset + position.x * cell.size, offset + position.y * cell.size, WHITE);
 
     // DrawRectangle(position.x * cell.size, position.y * cell.size, cell.size, cell.size, RED);
 }
@@ -82,11 +84,12 @@ Snake::Snake()
 
 void Snake::draw()
 {
+    float offset = 75;
     for (unsigned int i = 0; i < body.size(); i++)
     {
         float x = body[i].x;
         float y = body[i].y;
-        Rectangle segment = Rectangle{x * cell.size, y * cell.size, (float)cell.size, (float)cell.size};
+        Rectangle segment = Rectangle{offset + x * cell.size, offset + y * cell.size, (float)cell.size, (float)cell.size};
 
         DrawRectangleRounded(segment, 0.5, 3, DARKGREEN);
         // DrawRectangle(x * cell.size, y * cell.size, cell.size, cell.size, DARKGREEN);

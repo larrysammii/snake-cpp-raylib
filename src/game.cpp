@@ -8,8 +8,8 @@ void Game::gameOver()
 {
 
     running = false;
-    std::cout << "Game Over" << std::endl;
     snake.reset();
+    score = 0;
 }
 
 void Game::draw()
@@ -46,6 +46,7 @@ void Game::checkFoodCollision()
     {
         food.position = food.generateRandomPosition(snake.body);
         snake.addSegment = true;
+        score++;
     }
 }
 
